@@ -353,14 +353,11 @@ class Graph(Widget):
             If True all edges will be given 'directed' as a class if
             they do not already have it.
         """
-        node_list = []
         for node in json_file['nodes']:
             node_instance = Node()
             _set_attributes(node_instance, node)
-            node_list.append(node_instance)
-        self.nodes.extend(node_list)
+            self.add_node(node_instance)
 
-        edge_list = []
         if 'edges' in json_file:
             for edge in json_file['edges']:
                 edge_instance = Edge()
@@ -420,9 +417,10 @@ class Graph(Widget):
 
         # Adds group nodes and regular nodes to the graph object
         all_nodes = list(group_nodes.values()) + graph_nodes
-        self.nodes.extend(all_nodes)
-
-        self.edges.extend(graph_edges)
+        for node in all_nodes:
+            self.add_node(node)
+        for edge in graph_edges:
+            self.add_edge(edge)
 
 
 class CytoscapeWidget(DOMWidget):
